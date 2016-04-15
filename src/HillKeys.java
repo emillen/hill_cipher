@@ -1,5 +1,6 @@
+import org.jscience.mathematics.number.LargeInteger;
 import org.jscience.mathematics.number.Real;
-import org.jscience.mathematics.vector.*;
+import org.jscience.mathematics.vector.DenseMatrix;
 
 import java.util.Random;
 
@@ -21,17 +22,16 @@ public class HillKeys {
         //String fileName = args[1];
         DenseMatrix<Real> K = generateK();
         System.out.println(K.toString()); // testing if it works
-        Matrix<Real> inverse = K.inverse();
+        //DenseMatrix<Real> D = generateD(K.inverse());
         /*writeToFile(fileName, K, inverse);*/
     }
 
     /**
-     * Generates an invertible matrix
+     * Generates an invertible matrix with gcd(detM, 26) != 1
      *
      * @return a invertible matrix
      */
     private static DenseMatrix<Real> generateK() {
-        // TODO Generate a invertible matrix
         DenseMatrix<Real> K;
         Random r = new Random();
 
@@ -42,23 +42,25 @@ public class HillKeys {
                     {Real.valueOf(r.nextInt(26)), Real.valueOf(r.nextInt(26)), Real.valueOf(r.nextInt(26))}
             };
 
-
             K = DenseMatrix.valueOf(arr);
-            if (K.determinant().doubleValue() != 0)
+            LargeInteger determinant = LargeInteger.valueOf(K.determinant().longValue());
+            if (determinant.doubleValue() != 0 &&
+                    determinant.gcd(LargeInteger.valueOf(26)).equals(LargeInteger.valueOf(1)))
                 break;
         }
 
         return K;
     }
 
+
     /**
      * Writes the matrix, and inverse to a file
      *
      * @param fileName the name of the file to write to
-     * @param matrix   the matrix
-     * @param inverse  the inverse
+     * @param K        the encryption matrix
+     * @param D        the decryption matrix
      */
-    private static void writeToFile(String fileName, DenseMatrix matrix, DenseMatrix inverse) {
+    private static void writeToFile(String fileName, DenseMatrix K, DenseMatrix D) {
 
         // TODO Write matrices and inverse to file
 
