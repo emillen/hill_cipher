@@ -13,6 +13,8 @@ import java.util.Random;
  */
 public class HillKeys {
 
+    private final static int NUM_IN_ALPHBET = 26;
+
     public static void main(String[] args) {
 
         /*if (args.length != 2) {
@@ -22,7 +24,8 @@ public class HillKeys {
         //String fileName = args[1];
         DenseMatrix<Real> K = generateK();
         System.out.println(K.toString()); // testing if it works
-        //DenseMatrix<Real> D = generateD(K.inverse());
+        DenseMatrix<Real> D = generateD(K);
+        System.out.println(D.toString());
         /*writeToFile(fileName, K, inverse);*/
     }
 
@@ -37,9 +40,21 @@ public class HillKeys {
 
         while (true) {
             Real[][] arr = {
-                    {Real.valueOf(r.nextInt(26)), Real.valueOf(r.nextInt(26)), Real.valueOf(r.nextInt(26))},
-                    {Real.valueOf(r.nextInt(26)), Real.valueOf(r.nextInt(26)), Real.valueOf(r.nextInt(26))},
-                    {Real.valueOf(r.nextInt(26)), Real.valueOf(r.nextInt(26)), Real.valueOf(r.nextInt(26))}
+                    {
+                            Real.valueOf(r.nextInt(NUM_IN_ALPHBET)),
+                            Real.valueOf(r.nextInt(NUM_IN_ALPHBET)),
+                            Real.valueOf(r.nextInt(NUM_IN_ALPHBET))
+                    },
+                    {
+                            Real.valueOf(r.nextInt(NUM_IN_ALPHBET)),
+                            Real.valueOf(r.nextInt(NUM_IN_ALPHBET)),
+                            Real.valueOf(r.nextInt(NUM_IN_ALPHBET))
+                    },
+                    {
+                            Real.valueOf(r.nextInt(NUM_IN_ALPHBET)),
+                            Real.valueOf(r.nextInt(NUM_IN_ALPHBET)),
+                            Real.valueOf(r.nextInt(NUM_IN_ALPHBET))
+                    }
             };
 
             K = DenseMatrix.valueOf(arr);
@@ -52,6 +67,36 @@ public class HillKeys {
         return K;
     }
 
+
+    /**
+     * Generates the decryption matrix D from the matrix K
+     *
+     * @param K the original matrix
+     * @return the decryption matrix D
+     */
+    private static DenseMatrix<Real> generateD(DenseMatrix<Real> K) {
+
+        Real det = K.determinant();
+        System.out.println(det.toString());
+        Real detInv = Real.valueOf(LargeInteger.valueOf(det.longValue())
+                .modInverse(LargeInteger.valueOf(NUM_IN_ALPHBET)).longValue());
+
+        DenseMatrix<Real> inverse = K.inverse().times(det.times(detInv));
+
+        Real[][] arr = new Real[inverse.getNumberOfRows()][inverse.getNumberOfColumns()];
+        for (int i = 0; i < inverse.getNumberOfRows(); i++) {
+            for (int j = 0; j < inverse.getNumberOfColumns(); j++) {
+
+                LargeInteger mod = LargeInteger.valueOf(inverse.get(i, j).longValue()).mod(
+                        LargeInteger.valueOf(NUM_IN_ALPHBET));
+
+                Real n = Real.valueOf(mod.longValue());
+                arr[i][j] = n;
+            }
+        }
+
+        return DenseMatrix.valueOf(arr);
+    }
 
     /**
      * Writes the matrix, and inverse to a file
