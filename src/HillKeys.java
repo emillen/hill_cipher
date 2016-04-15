@@ -60,7 +60,7 @@ public class HillKeys {
             K = DenseMatrix.valueOf(arr);
             LargeInteger determinant = LargeInteger.valueOf(K.determinant().longValue());
             if (determinant.doubleValue() != 0 &&
-                    determinant.gcd(LargeInteger.valueOf(26)).equals(LargeInteger.valueOf(1)))
+                    determinant.gcd(LargeInteger.valueOf(NUM_IN_ALPHBET)).equals(LargeInteger.valueOf(1)))
                 break;
         }
 
@@ -77,7 +77,6 @@ public class HillKeys {
     private static DenseMatrix<Real> generateD(DenseMatrix<Real> K) {
 
         Real det = K.determinant();
-        System.out.println(det.toString());
         Real detInv = Real.valueOf(LargeInteger.valueOf(det.longValue())
                 .modInverse(LargeInteger.valueOf(NUM_IN_ALPHBET)).longValue());
 
