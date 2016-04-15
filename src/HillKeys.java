@@ -1,7 +1,7 @@
 import org.jscience.mathematics.vector.Float64Matrix;
 
 /**
- * Created by daseel on 2016-04-15.
+ * Created by Emil Lengman on 2016-04-15.
  */
 public class HillKeys {
 
