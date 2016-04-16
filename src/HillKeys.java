@@ -4,9 +4,7 @@ import org.jscience.mathematics.vector.DenseMatrix;
 
 import java.io.File;
 import java.io.PrintWriter;
-import java.io.UnsupportedEncodingException;
 import java.util.Random;
-import java.util.concurrent.Exchanger;
 
 /**
  * A program that generates a matrix K, and its inverse
