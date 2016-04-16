@@ -114,13 +114,12 @@ public class HillKeys {
     /**
      * Writes the matrix, and inverse to a file
      *
-     * @param file     the file to write to
+     * @param fileName     the file to write to
      * @param K        the encryption matrix
      * @param D        the decryption matrix
      */
-    private static void writeToFile(File file, DenseMatrix K, DenseMatrix D) {
+    private static void writeToFile(String fileName, DenseMatrix K, DenseMatrix D) {
 
         // TODO Write matrices and inverse to file
-
     }
 }
