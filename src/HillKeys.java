@@ -2,6 +2,7 @@ import org.jscience.mathematics.number.LargeInteger;
 import org.jscience.mathematics.number.Real;
 import org.jscience.mathematics.vector.DenseMatrix;
 
+import java.io.File;
 import java.util.Random;
 
 /**
@@ -20,8 +21,21 @@ public class HillKeys {
         /*if (args.length != 2) {
             System.out.println("Usage: HillKeys <file>");
             return;
-        }*/
-        //String fileName = args[1];
+        }
+        String fileName = args[1]
+        File file = new File(fileName);
+
+        if(file.exists() && file.isDirectory()){
+            System.out.println("File is a directory!");
+            System.out.println("Usage: HillKeys <file>");
+            return;
+        } else if(file.exists()){
+            System.out.println("File exists. Do you want to overwrite file?");
+            return;
+        }
+        */
+
+        //;
         DenseMatrix<Real> K = generateK();
         System.out.println(K.toString()); // testing if it works
         DenseMatrix<Real> D = generateD(K);
@@ -100,11 +114,11 @@ public class HillKeys {
     /**
      * Writes the matrix, and inverse to a file
      *
-     * @param fileName the name of the file to write to
+     * @param file     the file to write to
      * @param K        the encryption matrix
      * @param D        the decryption matrix
      */
-    private static void writeToFile(String fileName, DenseMatrix K, DenseMatrix D) {
+    private static void writeToFile(File file, DenseMatrix K, DenseMatrix D) {
 
         // TODO Write matrices and inverse to file
 
