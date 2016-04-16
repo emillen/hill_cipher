@@ -123,7 +123,6 @@ public class HillKeys {
      */
     private static void writeToFile(String fileName, DenseMatrix K, DenseMatrix D) {
 
-        // TODO Write matrices and inverse to file
         PrintWriter writer;
         try {
             writer = new PrintWriter(fileName, "UTF-8");
