@@ -3,7 +3,10 @@ import org.jscience.mathematics.number.Real;
 import org.jscience.mathematics.vector.DenseMatrix;
 
 import java.io.File;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.util.Random;
+import java.util.concurrent.Exchanger;
 
 /**
  * A program that generates a matrix K, and its inverse
@@ -18,11 +21,11 @@ public class HillKeys {
 
     public static void main(String[] args) {
 
-        /*if (args.length != 2) {
+        if (args.length != 1) {
             System.out.println("Usage: HillKeys <file>");
             return;
         }
-        String fileName = args[1]
+        String fileName = args[0];
         File file = new File(fileName);
 
         if(file.exists() && file.isDirectory()){
@@ -33,14 +36,14 @@ public class HillKeys {
             System.out.println("File exists. Do you want to overwrite file?");
             return;
         }
-        */
+
 
         //;
         DenseMatrix<Real> K = generateK();
         System.out.println(K.toString()); // testing if it works
         DenseMatrix<Real> D = generateD(K);
         System.out.println(D.toString());
-        /*writeToFile(fileName, K, inverse);*/
+        writeToFile(fileName, K, D);
     }
 
     /**
@@ -114,12 +117,23 @@ public class HillKeys {
     /**
      * Writes the matrix, and inverse to a file
      *
-     * @param fileName     the file to write to
+     * @param fileName the file to write to
      * @param K        the encryption matrix
      * @param D        the decryption matrix
      */
     private static void writeToFile(String fileName, DenseMatrix K, DenseMatrix D) {
 
         // TODO Write matrices and inverse to file
+        PrintWriter writer;
+        try {
+            writer = new PrintWriter(fileName, "UTF-8");
+        } catch (Exception e) {
+            System.out.println("Something went terribly wrong");
+            return;
+        }
+
+        writer.println(K.toString());
+        writer.println(D.toString());
+        writer.close();
     }
 }
