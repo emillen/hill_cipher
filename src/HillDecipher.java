@@ -14,7 +14,6 @@ public class HillDecipher {
 
     public static void main(String[] args) {
 
-        // TODO write program
         if (args.length != 3) {
             System.out.println("Usage: HillDecipher <fileContainingD> <fileContainingCipherText> <fileToSaveTo>");
             return;
