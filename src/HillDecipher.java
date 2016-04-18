@@ -79,27 +79,39 @@ public class HillDecipher {
         writer.close();
     }
 
-    private static void writeLastRow(PrintWriter writer, DenseMatrix<Real> matrix){
+    /**
+     * Depads and writes the last row to the file.
+     *
+     * @param writer the PrintWriter
+     * @param matrix the matrix that we are writing
+     */
+    private static void writeLastRow(PrintWriter writer, DenseMatrix<Real> matrix) {
 
         DenseVector<Real> lastRow = matrix.getRow(matrix.getNumberOfRows() - 1);
         int sameCount = countSame(lastRow);
         int amountToWrite = lastRow.getDimension();
-        if(sameCount == lastRow.get(amountToWrite - 1).intValue())
+        if (sameCount == lastRow.get(amountToWrite - 1).intValue())
             amountToWrite -= sameCount;
 
-        for(int i = 0; i < amountToWrite; i++)
+        for (int i = 0; i < amountToWrite; i++)
             writer.write(lastRow.get(i).intValue() + 65);
     }
 
-    private static int countSame(DenseVector<Real> row){
+    /**
+     * Counts how many numbers that are the same and next to eachother starting from the last number in the vector
+     *
+     * @param row the vector
+     * @return the count
+     */
+    private static int countSame(DenseVector<Real> row) {
 
         int last = row.getDimension() - 1;
         int value = row.get(last).intValue();
 
         int count = 1;
-        for(int i = last - 1; i >= 0; i--){
+        for (int i = last - 1; i >= 0; i--) {
             int iValue = row.get(i).intValue();
-            if(value == iValue)
+            if (value == iValue)
                 count++;
             else
                 break;
