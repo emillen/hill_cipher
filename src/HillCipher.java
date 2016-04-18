@@ -22,9 +22,9 @@ public class HillCipher {
     public static void main(String[] args) {
 
         // TODO write program
-        if (args.length != 2) {
+        if (args.length != 3) {
 
-            System.out.println("Usage: HillEncrypt <KFile> <messageFile>");
+            System.out.println("Usage: HillEncrypt <KFile> <messageFile> <cipherFile>");
         }
 
         String encryptFileName = args[0];
@@ -45,17 +45,24 @@ public class HillCipher {
 
     private static DenseMatrix<Real> cipher(DenseMatrix<Real> K, DenseMatrix<Real> message) {
 
-        return mod26(K.times(message));
+        return mod(K.times(message), NUM_IN_ALPHBET);
     }
 
-    private static DenseMatrix<Real> mod26(DenseMatrix<Real> matrix) {
+    /**
+     * Does mod operation on a matrix
+     *
+     * @param matrix the matrix to operate on
+     * @param num    the modulo number
+     * @return a matrix
+     */
+    private static DenseMatrix<Real> mod(DenseMatrix<Real> matrix, int num) {
 
         Real[][] arr = new Real[matrix.getNumberOfRows()][matrix.getNumberOfColumns()];
         for (int i = 0; i < matrix.getNumberOfRows(); i++) {
             for (int j = 0; j < matrix.getNumberOfColumns(); j++) {
 
                 LargeInteger mod = LargeInteger.valueOf(matrix.get(i, j).longValue()).mod(
-                        LargeInteger.valueOf(NUM_IN_ALPHBET));
+                        LargeInteger.valueOf(num));
 
                 Real n = Real.valueOf(mod.longValue());
                 arr[i][j] = n;
@@ -148,8 +155,13 @@ public class HillCipher {
                     int charact = reader.read();
                     if (charact == -1) {
                         notDone = false;
+                        int pad = 2 - i;
+                        for (int j = 0; j <= pad; j++) {
+                            characters.add(Real.valueOf(pad));
+                        }
                         break;
                     }
+                    charact -= 65;
                     if (charact % NUM_IN_ALPHBET != charact)
                         return null;
 
@@ -161,7 +173,7 @@ public class HillCipher {
 
             return null;
         }
-        return DenseMatrix.valueOf(vectors);
+        return DenseMatrix.valueOf(vectors).transpose();
 
     }
 }
