@@ -4,10 +4,11 @@
  * @author Emil Lengman
  * @author Simon Enerstrand
  */
-public class HillDecrypt {
+public class HillDecipher {
 
     public static void main(String[] args) {
 
         // TODO write program
+
     }
 }
