@@ -15,8 +15,6 @@ import java.util.Random;
  */
 public class HillKeys {
 
-    private final static int NUM_IN_ALPHBET = 26;
-
     public static void main(String[] args) {
 
         if (args.length != 2) {
@@ -60,26 +58,26 @@ public class HillKeys {
         while (true) {
             Real[][] arr = {
                     {
-                            Real.valueOf(r.nextInt(NUM_IN_ALPHBET)),
-                            Real.valueOf(r.nextInt(NUM_IN_ALPHBET)),
-                            Real.valueOf(r.nextInt(NUM_IN_ALPHBET))
+                            Real.valueOf(r.nextInt(Util.NUM_IN_ALPHBET)),
+                            Real.valueOf(r.nextInt(Util.NUM_IN_ALPHBET)),
+                            Real.valueOf(r.nextInt(Util.NUM_IN_ALPHBET))
                     },
                     {
-                            Real.valueOf(r.nextInt(NUM_IN_ALPHBET)),
-                            Real.valueOf(r.nextInt(NUM_IN_ALPHBET)),
-                            Real.valueOf(r.nextInt(NUM_IN_ALPHBET))
+                            Real.valueOf(r.nextInt(Util.NUM_IN_ALPHBET)),
+                            Real.valueOf(r.nextInt(Util.NUM_IN_ALPHBET)),
+                            Real.valueOf(r.nextInt(Util.NUM_IN_ALPHBET))
                     },
                     {
-                            Real.valueOf(r.nextInt(NUM_IN_ALPHBET)),
-                            Real.valueOf(r.nextInt(NUM_IN_ALPHBET)),
-                            Real.valueOf(r.nextInt(NUM_IN_ALPHBET))
+                            Real.valueOf(r.nextInt(Util.NUM_IN_ALPHBET)),
+                            Real.valueOf(r.nextInt(Util.NUM_IN_ALPHBET)),
+                            Real.valueOf(r.nextInt(Util.NUM_IN_ALPHBET))
                     }
             };
 
             K = DenseMatrix.valueOf(arr);
             LargeInteger determinant = LargeInteger.valueOf(K.determinant().longValue());
             if (determinant.doubleValue() != 0 &&
-                    determinant.gcd(LargeInteger.valueOf(NUM_IN_ALPHBET)).equals(LargeInteger.valueOf(1)))
+                    determinant.gcd(LargeInteger.valueOf(Util.NUM_IN_ALPHBET)).equals(LargeInteger.valueOf(1)))
                 break;
         }
 
@@ -97,11 +95,11 @@ public class HillKeys {
 
         Real det = K.determinant();
         Real detInv = Real.valueOf(LargeInteger.valueOf(det.longValue())
-                .modInverse(LargeInteger.valueOf(NUM_IN_ALPHBET)).longValue());
+                .modInverse(LargeInteger.valueOf(Util.NUM_IN_ALPHBET)).longValue());
 
         DenseMatrix<Real> inverse = K.inverse().times(det.times(detInv));
 
-        return Util.mod(inverse, NUM_IN_ALPHBET);
+        return Util.mod(inverse, Util.NUM_IN_ALPHBET);
     }
 
     /**

@@ -17,6 +17,8 @@ import java.util.Scanner;
  */
 class Util {
 
+    static final int NUM_IN_ALPHBET = 26;
+
     /**
      * Multiplies a two matrices and then performs a modulo operation on the resulting matrix
      *
@@ -132,5 +134,85 @@ class Util {
             }
         }
         return DenseVector.valueOf(reals);
+    }
+
+    /**
+     * Creates a matrix from the contents of a file
+     *
+     * @param messageFileName the name of the file
+     * @return a DenseMatrix that represents the content of the file
+     */
+    static DenseMatrix<Real> getStringMatrixFromFile(String messageFileName) {
+
+        if (!(new File(messageFileName).isFile()))
+            return null;
+
+        List<DenseVector<Real>> vectors = new ArrayList<>();
+        try (
+                InputStream is = new FileInputStream(messageFileName);
+                InputStreamReader isr = new InputStreamReader(is, Charset.forName("UTF-8"));
+                BufferedReader reader = new BufferedReader(isr)
+        ) {
+            while (true) {
+                List<Real> characters = getCharacters(reader);
+
+                if (characters == null || characters.size() == 0)
+                    break;
+                vectors.add(DenseVector.valueOf(characters));
+            }
+        } catch (Exception e) {
+
+            return null;
+        }
+        return DenseMatrix.valueOf(vectors).transpose();
+
+    }
+
+    private static List<Real> getCharacters(BufferedReader reader) throws IOException {
+        List<Real> characters = new ArrayList<>();
+        for (int i = 0; i < 3; i++) {
+            int charact = reader.read();
+            if (charact == -1) {
+                if (i == 0)
+                    break;
+                int pad = 3 % i;
+                for (int j = 0; j < pad; j++) {
+                    characters.add(Real.valueOf(pad));
+                }
+                break;
+            }
+            charact -= 65;
+            if (charact % Util.NUM_IN_ALPHBET != charact)
+                return null;
+
+            characters.add(Real.valueOf(charact));
+        }
+
+        return characters;
+    }
+
+    /**
+     * Writes the matrix to a file
+     *
+     * @param fileName the file to write to
+     * @param matrix   the encryption matrix
+     */
+    static void writeToFile(String fileName, DenseMatrix<Real> matrix) {
+
+        PrintWriter writer;
+
+        try {
+            writer = new PrintWriter(fileName, "UTF-8");
+        } catch (Exception e) {
+            System.out.println("Something went terribly wrong");
+            return;
+        }
+
+        for (int i = 0; i < matrix.getNumberOfRows(); i++) {
+            for (int j = 0; j < matrix.getNumberOfColumns(); j++) {
+                writer.write(matrix.get(i, j).intValue() + 65);
+            }
+        }
+        writer.close();
     }
 }
