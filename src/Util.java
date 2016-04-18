@@ -1,7 +1,12 @@
 import org.jscience.mathematics.number.LargeInteger;
 import org.jscience.mathematics.number.Real;
 import org.jscience.mathematics.vector.DenseMatrix;
+import org.jscience.mathematics.vector.DenseVector;
 
+import java.io.*;
+import java.nio.charset.Charset;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 /**
@@ -67,5 +72,65 @@ class Util {
                 return false;
             }
         }
+    }
+
+    /**
+     * Reads a matrix from a file
+     *
+     * @param filename the name of the file
+     * @return a DenseMatrix
+     */
+    static DenseMatrix<Real> getMatrixFromFile(String filename) {
+
+        if (!(new File(filename).isFile()))
+            return null;
+
+        List<DenseVector<Real>> vectors = new ArrayList<>();
+
+        try (
+                InputStream is = new FileInputStream(filename);
+                InputStreamReader isr = new InputStreamReader(is, Charset.forName("UTF-8"));
+                BufferedReader reader = new BufferedReader(isr)
+        ) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+
+                vectors.add(getVector(line));
+            }
+        } catch (Exception e) {
+
+            return null;
+        }
+
+        if (vectors.size() == 0)
+            return null;
+
+        return DenseMatrix.valueOf(vectors);
+    }
+
+    /**
+     * Returns a vector that is parsed from a string
+     *
+     * @param line the string to parse
+     * @return a DenseVector that the string represents
+     */
+    private static DenseVector<Real> getVector(String line) {
+
+        // TODO parse lines to get vector
+        line = line.replace("{", "");
+        line = line.replace("}", "");
+        line = line.replaceAll("\\s+", "");
+        String[] numbers = line.split(",");
+
+        List<Real> reals = new ArrayList<>();
+
+        for (String s : numbers) {
+            try {
+                reals.add(Real.valueOf(Integer.parseInt(s)));
+            } catch (Exception e) {
+                return null;
+            }
+        }
+        return DenseVector.valueOf(reals);
     }
 }

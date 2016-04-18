@@ -1,4 +1,3 @@
-import org.jscience.mathematics.number.LargeInteger;
 import org.jscience.mathematics.number.Real;
 import org.jscience.mathematics.vector.DenseMatrix;
 import org.jscience.mathematics.vector.DenseVector;
@@ -7,7 +6,6 @@ import java.io.*;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 
 /**
  * A program used to encrypt a file using hill cipher algorithm
@@ -22,7 +20,6 @@ public class HillCipher {
 
     public static void main(String[] args) {
 
-        // TODO write program
         if (args.length != 3) {
             System.out.println(args.length);
             System.out.println("Usage: HillEncrypt <KFile> <messageFile> <cipherFile>");
@@ -34,7 +31,7 @@ public class HillCipher {
         String saveFile = args[2];
         DenseMatrix<Real> K;
 
-        if ((K = getK(encryptFileName)) == null) {
+        if ((K = Util.getMatrixFromFile(encryptFileName)) == null) {
             System.out.println("File <" + encryptFileName + "> does not exist, or does not contain a matrix");
         }
         DenseMatrix<Real> messageMatrix;
@@ -55,66 +52,6 @@ public class HillCipher {
     private static DenseMatrix<Real> cipher(DenseMatrix<Real> K, DenseMatrix<Real> message) {
 
         return Util.timesMod(K, message, NUM_IN_ALPHBET);
-    }
-
-    /**
-     * Reads a encryption matrix K from a file
-     *
-     * @param KFileName the name of the file
-     * @return a DenseMatrix
-     */
-    private static DenseMatrix<Real> getK(String KFileName) {
-
-        if (!(new File(KFileName).isFile()))
-            return null;
-
-        List<DenseVector<Real>> vectors = new ArrayList<>();
-
-        try (
-                InputStream is = new FileInputStream(KFileName);
-                InputStreamReader isr = new InputStreamReader(is, Charset.forName("UTF-8"));
-                BufferedReader reader = new BufferedReader(isr)
-        ) {
-            String line;
-            while ((line = reader.readLine()) != null) {
-
-                vectors.add(getVector(line));
-            }
-        } catch (Exception e) {
-
-            return null;
-        }
-
-        if (vectors.size() == 0)
-            return null;
-
-        return DenseMatrix.valueOf(vectors);
-    }
-
-    /**
-     * Returns a vector that is parsed from a string
-     *
-     * @param line the string to parse
-     * @return a DenseVector that the string represents
-     */
-    private static DenseVector<Real> getVector(String line) {
-
-        // TODO parse lines to get vector
-        line = line.replace("{", "");
-        line = line.replace("}", "");
-        line = line.replaceAll("\\s+", "");
-        String[] numbers = line.split(",");
-
-        List<Real> reals = new ArrayList<>();
-
-        for (String s : numbers) {
-            try {
-                reals.add(Real.valueOf(Integer.parseInt(s)));
-            } catch (Exception e) {
-                return null;
-            }
-        }
-        return DenseVector.valueOf(reals);
     }
 
     /**
