@@ -41,12 +41,6 @@ public class HillCipher {
         }
 
         System.out.println(cipher(K, messageMatrix).toString());
-
-        List<DenseVector<Real>> reals = new ArrayList<>();
-        DenseMatrix<Real> real = DenseMatrix.valueOf(reals);
-
-        if (real == null)
-            System.out.println("Yup den är null");
     }
 
     private static DenseMatrix<Real> cipher(DenseMatrix<Real> K, DenseMatrix<Real> message) {
