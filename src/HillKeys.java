@@ -5,7 +5,6 @@ import org.jscience.mathematics.vector.DenseMatrix;
 import java.io.File;
 import java.io.PrintWriter;
 import java.util.Random;
-import java.util.Scanner;
 
 /**
  * A program that generates a matrix K, and its inverse
