@@ -97,18 +97,22 @@ public class HillKeys {
 
         DenseMatrix<Real> inverse = K.inverse().times(det.times(detInv));
 
-        Real[][] arr = new Real[inverse.getNumberOfRows()][inverse.getNumberOfColumns()];
-        for (int i = 0; i < inverse.getNumberOfRows(); i++) {
-            for (int j = 0; j < inverse.getNumberOfColumns(); j++) {
+        return mod26(inverse);
+    }
 
-                LargeInteger mod = LargeInteger.valueOf(inverse.get(i, j).longValue()).mod(
+    private static DenseMatrix<Real> mod26(DenseMatrix<Real> matrix){
+
+        Real[][] arr = new Real[matrix.getNumberOfRows()][matrix.getNumberOfColumns()];
+        for (int i = 0; i < matrix.getNumberOfRows(); i++) {
+            for (int j = 0; j < matrix.getNumberOfColumns(); j++) {
+
+                LargeInteger mod = LargeInteger.valueOf(matrix.get(i, j).longValue()).mod(
                         LargeInteger.valueOf(NUM_IN_ALPHBET));
 
                 Real n = Real.valueOf(mod.longValue());
                 arr[i][j] = n;
             }
         }
-
         return DenseMatrix.valueOf(arr);
     }
 
