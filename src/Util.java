@@ -12,12 +12,26 @@ import java.util.Scanner;
  */
 class Util {
 
+    /**
+     * Multiplies a two matrices and then performs a modulo operation on the resulting matrix
+     *
+     * @param a            first matrix
+     * @param b            second matrix
+     * @param moduloNumber the modulo number
+     * @return a matrix
+     */
     static DenseMatrix<Real> timesMod(DenseMatrix<Real> a, DenseMatrix<Real> b, int moduloNumber) {
 
         return mod(a.times(b), moduloNumber);
     }
 
-
+    /**
+     * Performs mod operation to a matrix
+     *
+     * @param matrix       the matrix
+     * @param moduloNumber the modulo number
+     * @return a matrix
+     */
     static DenseMatrix<Real> mod(DenseMatrix<Real> matrix, int moduloNumber) {
 
         Real[][] arr = new Real[matrix.getNumberOfRows()][matrix.getNumberOfColumns()];
@@ -34,6 +48,12 @@ class Util {
         return DenseMatrix.valueOf(arr);
     }
 
+    /**
+     * Asks a the user if he/she wants to overwrite a file, and returns a boolean representing her/his answer
+     *
+     * @param filename the name of the file
+     * @return true if yes, false if no
+     */
     static boolean overwrite(String filename) {
 
         while (true) {
