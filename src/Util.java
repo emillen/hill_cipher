@@ -153,12 +153,18 @@ class Util {
                 InputStreamReader isr = new InputStreamReader(is, Charset.forName("UTF-8"));
                 BufferedReader reader = new BufferedReader(isr)
         ) {
+            int last = 0;
             while (true) {
-                List<Real> characters = getCharacters(reader);
+                List<Real> characters = new ArrayList<>();
+                last = getCharacters(reader, characters, last);
 
-                if (characters == null || characters.size() == 0)
+                if (characters.size() == 0)
                     break;
+
                 vectors.add(DenseVector.valueOf(characters));
+
+                if(last == -1)
+                    break;
             }
         } catch (Exception e) {
 
@@ -168,28 +174,33 @@ class Util {
 
     }
 
-    private static List<Real> getCharacters(BufferedReader reader) throws IOException {
-        List<Real> characters = new ArrayList<>();
-        int lastChar = -1;
+    private static int getCharacters(BufferedReader reader, List<Real> characters, int last) throws IOException {
         for (int i = 0; i < 3; i++) {
             int charact = reader.read();
             if (charact == -1) {
-                int pad = padNumber(i);
-
-                for (int j = 0; j < pad; j++) {
-                    characters.add(Real.valueOf(pad));
-                }
-                break;
+                pad(characters, i , last);
+                return -1;
             }
             charact -= 65;
             if (charact % Util.NUM_IN_ALPHBET != charact)
-                return null;
+                return -1;
 
             characters.add(Real.valueOf(charact));
-            lastChar = charact;
+            last = charact;
         }
+        return last;
+    }
 
-        return characters;
+    private static void pad(List<Real> characters, int i, int last){
+
+        System.out.println(last);
+        System.out.println(i);
+        int pad = padNumber(i);
+        if(last == 1 && i == 0)
+            pad = 3;
+        for (int j = 0; j < pad; j++) {
+            characters.add(Real.valueOf(pad));
+        }
     }
 
     private static int padNumber(int i) {
@@ -204,6 +215,4 @@ class Util {
                 return 0;
         }
     }
-
-
 }
