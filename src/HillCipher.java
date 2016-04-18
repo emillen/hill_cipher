@@ -46,7 +46,7 @@ public class HillCipher {
         List<DenseVector<Real>> reals = new ArrayList<>();
         DenseMatrix<Real> real = DenseMatrix.valueOf(reals);
 
-        if(real == null)
+        if (real == null)
             System.out.println("Yup den är null");
     }
 
@@ -55,7 +55,7 @@ public class HillCipher {
         return mod26(K.times(message));
     }
 
-    private static DenseMatrix<Real> mod26(DenseMatrix<Real> matrix){
+    private static DenseMatrix<Real> mod26(DenseMatrix<Real> matrix) {
 
         Real[][] arr = new Real[matrix.getNumberOfRows()][matrix.getNumberOfColumns()];
         for (int i = 0; i < matrix.getNumberOfRows(); i++) {
@@ -99,7 +99,7 @@ public class HillCipher {
             return null;
         }
 
-        if(vectors.size() == 0)
+        if (vectors.size() == 0)
             return null;
 
         return DenseMatrix.valueOf(vectors);
@@ -142,10 +142,33 @@ public class HillCipher {
         if (!(new File(messageFileName).isFile()))
             return null;
 
-        // TODO read text from file, and create DenseMatrix
-        return null;
+        List<DenseVector<Real>> vectors = new ArrayList<>();
+        try (
+                InputStream is = new FileInputStream(messageFileName);
+                InputStreamReader isr = new InputStreamReader(is, Charset.forName("UTF-8"));
+                BufferedReader reader = new BufferedReader(isr)
+        ) {
+            boolean notDone = true;
+            while (notDone) {
+                List<Real> characters = new ArrayList<>();
+                for (int i = 0; i < 3; i++) {
+                    int charact = reader.read();
+                    if (charact == -1) {
+                        notDone = false;
+                        break;
+                    }
+                    if (charact % NUM_IN_ALPHBET != charact)
+                        return null;
+
+                    characters.add(Real.valueOf(charact));
+                }
+                vectors.add(DenseVector.valueOf(characters));
+            }
+        } catch (Exception e) {
+
+            return null;
+        }
+        return DenseMatrix.valueOf(vectors);
 
     }
-
-
 }
