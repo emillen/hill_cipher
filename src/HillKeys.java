@@ -100,7 +100,7 @@ public class HillKeys {
         return mod26(inverse);
     }
 
-    private static DenseMatrix<Real> mod26(DenseMatrix<Real> matrix){
+    private static DenseMatrix<Real> mod26(DenseMatrix<Real> matrix) {
 
         Real[][] arr = new Real[matrix.getNumberOfRows()][matrix.getNumberOfColumns()];
         for (int i = 0; i < matrix.getNumberOfRows(); i++) {
