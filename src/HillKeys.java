@@ -5,6 +5,7 @@ import org.jscience.mathematics.vector.DenseMatrix;
 import java.io.File;
 import java.io.PrintWriter;
 import java.util.Random;
+import java.util.Scanner;
 
 /**
  * A program that generates a matrix K, and its inverse
@@ -26,23 +27,27 @@ public class HillKeys {
 
         String KFileName = args[0];
         String DFileName = args[1];
-        File file = new File(KFileName);
+        File Kfile = new File(KFileName);
+        File Dfile = new File(DFileName);
 
-        if (file.exists() && file.isDirectory()) {
-            System.out.println("File is a directory!");
-            System.out.println("Usage: HillKeys <file>");
-            return;
-        } else if (file.exists()) {
-            System.out.println("File exists. Do you want to overwrite file?");
-            return;
+        if (Kfile.isFile()) {
+            if (!Util.overwrite(KFileName)) {
+                return;
+            }
         }
 
+        if (Dfile.isFile()) {
+            if (!Util.overwrite(DFileName)) {
+                return;
+            }
+        }
 
         DenseMatrix<Real> K = generateK();
         DenseMatrix<Real> D = generateD(K);
         writeToFile(KFileName, K);
         writeToFile(DFileName, D);
     }
+
 
     /**
      * Generates an invertible matrix with gcd(detM, 26) != 1
@@ -97,23 +102,7 @@ public class HillKeys {
 
         DenseMatrix<Real> inverse = K.inverse().times(det.times(detInv));
 
-        return mod26(inverse);
-    }
-
-    private static DenseMatrix<Real> mod26(DenseMatrix<Real> matrix) {
-
-        Real[][] arr = new Real[matrix.getNumberOfRows()][matrix.getNumberOfColumns()];
-        for (int i = 0; i < matrix.getNumberOfRows(); i++) {
-            for (int j = 0; j < matrix.getNumberOfColumns(); j++) {
-
-                LargeInteger mod = LargeInteger.valueOf(matrix.get(i, j).longValue()).mod(
-                        LargeInteger.valueOf(NUM_IN_ALPHBET));
-
-                Real n = Real.valueOf(mod.longValue());
-                arr[i][j] = n;
-            }
-        }
-        return DenseMatrix.valueOf(arr);
+        return Util.mod(inverse, NUM_IN_ALPHBET);
     }
 
     /**
