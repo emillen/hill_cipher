@@ -37,7 +37,7 @@ public class HillCipher {
                 return;
         }
 
-        Util.writeToFile(saveFile, cipher(K, messageMatrix).transpose());
+        writeToFile(saveFile, cipher(K, messageMatrix).transpose());
     }
 
 
@@ -45,5 +45,30 @@ public class HillCipher {
     private static DenseMatrix<Real> cipher(DenseMatrix<Real> K, DenseMatrix<Real> message) {
 
         return Util.timesMod(K, message, Util.NUM_IN_ALPHBET);
+    }
+
+    /**
+     * Writes the matrix to a file
+     *
+     * @param fileName the file to write to
+     * @param matrix   the encryption matrix
+     */
+    private static void writeToFile(String fileName, DenseMatrix<Real> matrix) {
+
+        PrintWriter writer;
+
+        try {
+            writer = new PrintWriter(fileName, "UTF-8");
+        } catch (Exception e) {
+            System.out.println("Something went terribly wrong");
+            return;
+        }
+
+        for (int i = 0; i < matrix.getNumberOfRows(); i++) {
+            for (int j = 0; j < matrix.getNumberOfColumns(); j++) {
+                writer.write(matrix.get(i, j).intValue() + 65);
+            }
+        }
+        writer.close();
     }
 }

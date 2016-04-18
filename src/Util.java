@@ -170,6 +170,7 @@ class Util {
 
     private static List<Real> getCharacters(BufferedReader reader) throws IOException {
         List<Real> characters = new ArrayList<>();
+        int lastChar = -1;
         for (int i = 0; i < 3; i++) {
             int charact = reader.read();
             if (charact == -1) {
@@ -185,6 +186,7 @@ class Util {
                 return null;
 
             characters.add(Real.valueOf(charact));
+            lastChar = charact;
         }
 
         return characters;
@@ -203,28 +205,5 @@ class Util {
         }
     }
 
-    /**
-     * Writes the matrix to a file
-     *
-     * @param fileName the file to write to
-     * @param matrix   the encryption matrix
-     */
-    static void writeToFile(String fileName, DenseMatrix<Real> matrix) {
 
-        PrintWriter writer;
-
-        try {
-            writer = new PrintWriter(fileName, "UTF-8");
-        } catch (Exception e) {
-            System.out.println("Something went terribly wrong");
-            return;
-        }
-
-        for (int i = 0; i < matrix.getNumberOfRows(); i++) {
-            for (int j = 0; j < matrix.getNumberOfColumns(); j++) {
-                writer.write(matrix.get(i, j).intValue() + 65);
-            }
-        }
-        writer.close();
-    }
 }
