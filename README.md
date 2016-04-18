@@ -1,4 +1,5 @@
 # Hill Cipher
+
 The folder contains 3 shell script files:
 
     HillKeys.sh
@@ -23,6 +24,7 @@ and the file to save the decryption matrix 'D' in. Example:
 
 
 ### HillCipher
+
 HillCipher.sh takes three arguments:
 The file containing the encryption matrix 'K', the file containing the message 'M',
 and the file 'C' to save the cipher text in. Example:
