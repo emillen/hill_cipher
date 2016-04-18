@@ -19,8 +19,8 @@ chmod +x <filename>
 ### HillKeys
 
 HillKeys.sh takes two arguments:
-The file to save the encryption matrix 'K' in,
-and the file to save the decryption matrix 'D' in. Example:
+The file to save the encryption matrix _'K_' in,
+and the file to save the decryption matrix _'D'_ in. Example:
 
 ```bash
 ./HillKeys.sh K D
@@ -29,8 +29,8 @@ and the file to save the decryption matrix 'D' in. Example:
 ### HillCipher
 
 HillCipher.sh takes three arguments:
-The file containing the encryption matrix 'K', the file containing the message 'M',
-and the file 'C' to save the cipher text in. Example:
+The file containing the encryption matrix _'K'_, the file containing the message _'M'_,
+and the file _'C'_ to save the cipher text in. Example:
 
 ```bash
 ./HillCipher.sh K M C
@@ -38,8 +38,8 @@ and the file 'C' to save the cipher text in. Example:
 
 ### HillDecipher
 HillDecipher.sh takes three arguments:
-The file containing the decryption matrix 'D', the file containing the
-cipher text 'C', and the file to save the plain text message 'M' to
+The file containing the decryption matrix _'D'_, the file containing the
+cipher text _'C'_, and the file to save the plain text message _'M'_ to
 
 ```bash
 ./HillDecipher.sh D C M
