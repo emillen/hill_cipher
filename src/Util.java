@@ -173,9 +173,8 @@ class Util {
         for (int i = 0; i < 3; i++) {
             int charact = reader.read();
             if (charact == -1) {
-                if (i == 0)
-                    break;
-                int pad = 3 % i;
+                int pad = padNumber(i);
+
                 for (int j = 0; j < pad; j++) {
                     characters.add(Real.valueOf(pad));
                 }
@@ -189,6 +188,19 @@ class Util {
         }
 
         return characters;
+    }
+
+    private static int padNumber(int i) {
+
+        switch (i) {
+
+            case 1:
+                return 2;
+            case 2:
+                return 1;
+            default:
+                return 0;
+        }
     }
 
     /**
