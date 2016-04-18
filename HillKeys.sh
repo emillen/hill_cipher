@@ -1,4 +1,10 @@
 #!/usr/bin/env bash
-mkdir -p out
-javac -cp 'lib/jscience.jar' -d 'out/' src/HillKeys.java
-java -cp 'lib/jscience.jar:out/' HillKeys
+if [ -z "$2" ]; then
+    echo 'Usage: HillKeys <fileName>'
+else
+    echo $1
+    mkdir -p out
+    javac -cp 'lib/jscience.jar' -d 'out/' src/HillKeys.java
+    java -cp 'lib/jscience.jar:out/' HillKeys $1 $2
+fi
+
