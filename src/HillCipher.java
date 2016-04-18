@@ -9,7 +9,7 @@ import java.io.File;
  * @author Emil Lengman
  * @author Simon Enerstrand
  */
-public class HillEncrypt {
+public class HillCipher {
 
 
     private final int NUM_IN_ALPHBET = 26;
