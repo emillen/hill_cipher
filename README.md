@@ -2,9 +2,9 @@
 
 The folder contains 3 shell script files:
 
--HillKeys.sh
--HillCipher.sh
--HillDecipher.sh
+- HillKeys.sh
+- HillCipher.sh
+- HillDecipher.sh
 
 These scripts compile and run the three programs in the task.
 
