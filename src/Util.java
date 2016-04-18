@@ -193,8 +193,6 @@ class Util {
 
     private static void pad(List<Real> characters, int i, int last){
 
-        System.out.println(last);
-        System.out.println(i);
         int pad = padNumber(i);
         if(last == 1 && i == 0)
             pad = 3;
