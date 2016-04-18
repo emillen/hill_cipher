@@ -7,6 +7,7 @@ import java.io.*;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 /**
  * A program used to encrypt a file using hill cipher algorithm
@@ -23,13 +24,14 @@ public class HillCipher {
 
         // TODO write program
         if (args.length != 3) {
-
+            System.out.println(args.length);
             System.out.println("Usage: HillEncrypt <KFile> <messageFile> <cipherFile>");
+            return;
         }
 
         String encryptFileName = args[0];
         String messageFileName = args[1];
-
+        String saveFile = args[2];
         DenseMatrix<Real> K;
 
         if ((K = getK(encryptFileName)) == null) {
@@ -40,35 +42,19 @@ public class HillCipher {
             System.out.println("The file does not exist, or does not contain a valid message");
         }
 
-        System.out.println(cipher(K, messageMatrix).toString());
+        if(new File(saveFile).isFile()){
+            if(!Util.overwrite(saveFile))
+                return;
+        }
+
+        writeToFile(saveFile, cipher(K, messageMatrix).transpose());
     }
+
+
 
     private static DenseMatrix<Real> cipher(DenseMatrix<Real> K, DenseMatrix<Real> message) {
 
-        return mod(K.times(message), NUM_IN_ALPHBET);
-    }
-
-    /**
-     * Does mod operation on a matrix
-     *
-     * @param matrix the matrix to operate on
-     * @param num    the modulo number
-     * @return a matrix
-     */
-    private static DenseMatrix<Real> mod(DenseMatrix<Real> matrix, int num) {
-
-        Real[][] arr = new Real[matrix.getNumberOfRows()][matrix.getNumberOfColumns()];
-        for (int i = 0; i < matrix.getNumberOfRows(); i++) {
-            for (int j = 0; j < matrix.getNumberOfColumns(); j++) {
-
-                LargeInteger mod = LargeInteger.valueOf(matrix.get(i, j).longValue()).mod(
-                        LargeInteger.valueOf(num));
-
-                Real n = Real.valueOf(mod.longValue());
-                arr[i][j] = n;
-            }
-        }
-        return DenseMatrix.valueOf(arr);
+        return Util.timesMod(K, message, NUM_IN_ALPHBET);
     }
 
     /**
@@ -148,25 +134,11 @@ public class HillCipher {
                 InputStreamReader isr = new InputStreamReader(is, Charset.forName("UTF-8"));
                 BufferedReader reader = new BufferedReader(isr)
         ) {
-            boolean notDone = true;
-            while (notDone) {
-                List<Real> characters = new ArrayList<>();
-                for (int i = 0; i < 3; i++) {
-                    int charact = reader.read();
-                    if (charact == -1) {
-                        notDone = false;
-                        int pad = 2 - i;
-                        for (int j = 0; j <= pad; j++) {
-                            characters.add(Real.valueOf(pad));
-                        }
-                        break;
-                    }
-                    charact -= 65;
-                    if (charact % NUM_IN_ALPHBET != charact)
-                        return null;
+            while (true) {
+                List<Real> characters = getCharacters(reader);
 
-                    characters.add(Real.valueOf(charact));
-                }
+                if(characters == null || characters.size() == 0)
+                    break;
                 vectors.add(DenseVector.valueOf(characters));
             }
         } catch (Exception e) {
@@ -175,5 +147,53 @@ public class HillCipher {
         }
         return DenseMatrix.valueOf(vectors).transpose();
 
+    }
+
+    private static List<Real> getCharacters(BufferedReader reader) throws IOException{
+        List<Real> characters = new ArrayList<>();
+        for (int i = 0; i < 3; i++) {
+            int charact = reader.read();
+            if (charact == -1) {
+                if (i == 0)
+                    break;
+                int pad = 3 % i;
+                for (int j = 0; j < pad; j++) {
+                    characters.add(Real.valueOf(pad));
+                }
+                break;
+            }
+            charact -= 65;
+            if (charact % NUM_IN_ALPHBET != charact)
+                return null;
+
+            characters.add(Real.valueOf(charact));
+        }
+
+        return characters;
+    }
+
+    /**
+     * Writes the matrix to a file
+     *
+     * @param fileName the file to write to
+     * @param matrix   the encryption matrix
+     */
+    private static void writeToFile(String fileName, DenseMatrix<Real> matrix) {
+
+        PrintWriter writer;
+
+        try {
+            writer = new PrintWriter(fileName, "UTF-8");
+        } catch (Exception e) {
+            System.out.println("Something went terribly wrong");
+            return;
+        }
+
+        for(int i = 0; i < matrix.getNumberOfRows(); i++){
+            for(int j = 0; j < matrix.getNumberOfColumns(); j++){
+                writer.write(matrix.get(i, j).intValue() + 65);
+            }
+        }
+        writer.close();
     }
 }
