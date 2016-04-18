@@ -1,6 +1,8 @@
+import org.jscience.mathematics.number.LargeInteger;
 import org.jscience.mathematics.number.Real;
 import org.jscience.mathematics.vector.DenseMatrix;
 import org.jscience.mathematics.vector.DenseVector;
+import org.jscience.mathematics.vector.Vector;
 
 import java.io.*;
 import java.nio.charset.Charset;
@@ -16,7 +18,7 @@ import java.util.List;
 public class HillCipher {
 
 
-    private final int NUM_IN_ALPHBET = 26;
+    private static final int NUM_IN_ALPHBET = 26;
 
     public static void main(String[] args) {
 
@@ -40,11 +42,33 @@ public class HillCipher {
         }
 
         System.out.println(cipher(K, messageMatrix).toString());
+
+        List<DenseVector<Real>> reals = new ArrayList<>();
+        DenseMatrix<Real> real = DenseMatrix.valueOf(reals);
+
+        if(real == null)
+            System.out.println("Yup den är null");
     }
 
     private static DenseMatrix<Real> cipher(DenseMatrix<Real> K, DenseMatrix<Real> message) {
 
-        return K.times(message);
+        return mod26(K.times(message));
+    }
+
+    private static DenseMatrix<Real> mod26(DenseMatrix<Real> matrix){
+
+        Real[][] arr = new Real[matrix.getNumberOfRows()][matrix.getNumberOfColumns()];
+        for (int i = 0; i < matrix.getNumberOfRows(); i++) {
+            for (int j = 0; j < matrix.getNumberOfColumns(); j++) {
+
+                LargeInteger mod = LargeInteger.valueOf(matrix.get(i, j).longValue()).mod(
+                        LargeInteger.valueOf(NUM_IN_ALPHBET));
+
+                Real n = Real.valueOf(mod.longValue());
+                arr[i][j] = n;
+            }
+        }
+        return DenseMatrix.valueOf(arr);
     }
 
     /**
@@ -74,6 +98,10 @@ public class HillCipher {
 
             return null;
         }
+
+        if(vectors.size() == 0)
+            return null;
+
         return DenseMatrix.valueOf(vectors);
     }
 
@@ -86,7 +114,21 @@ public class HillCipher {
     private static DenseVector<Real> getVector(String line) {
 
         // TODO parse lines to get vector
-        return null;
+        line = line.replace("{", "");
+        line = line.replace("}", "");
+        line = line.replaceAll("\\s+", "");
+        String[] numbers = line.split(",");
+
+        List<Real> reals = new ArrayList<>();
+
+        for (String s : numbers) {
+            try {
+                reals.add(Real.valueOf(Integer.parseInt(s)));
+            } catch (Exception e) {
+                return null;
+            }
+        }
+        return DenseVector.valueOf(reals);
     }
 
     /**
