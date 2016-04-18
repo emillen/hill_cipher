@@ -19,29 +19,29 @@ public class HillKeys {
 
     public static void main(String[] args) {
 
-        if (args.length != 1) {
-            System.out.println("Usage: HillKeys <file>");
+        if (args.length != 2) {
+            System.out.println("Usage: HillKeys <fileToSaveK> <fileToSaveD>");
             return;
         }
-        String fileName = args[0];
-        File file = new File(fileName);
 
-        if(file.exists() && file.isDirectory()){
+        String KFileName = args[0];
+        String DFileName = args[1];
+        File file = new File(KFileName);
+
+        if (file.exists() && file.isDirectory()) {
             System.out.println("File is a directory!");
             System.out.println("Usage: HillKeys <file>");
             return;
-        } else if(file.exists()){
+        } else if (file.exists()) {
             System.out.println("File exists. Do you want to overwrite file?");
             return;
         }
 
 
-        //;
         DenseMatrix<Real> K = generateK();
-        System.out.println(K.toString()); // testing if it works
         DenseMatrix<Real> D = generateD(K);
-        System.out.println(D.toString());
-        writeToFile(fileName, K, D);
+        writeToFile(KFileName, K);
+        writeToFile(DFileName, D);
     }
 
     /**
@@ -113,13 +113,12 @@ public class HillKeys {
     }
 
     /**
-     * Writes the matrix, and inverse to a file
+     * Writes the matrix to a file
      *
      * @param fileName the file to write to
-     * @param K        the encryption matrix
-     * @param D        the decryption matrix
+     * @param matrix   the encryption matrix
      */
-    private static void writeToFile(String fileName, DenseMatrix K, DenseMatrix D) {
+    private static void writeToFile(String fileName, DenseMatrix matrix) {
 
         PrintWriter writer;
         try {
@@ -129,8 +128,7 @@ public class HillKeys {
             return;
         }
 
-        writer.println(K.toString());
-        writer.println(D.toString());
+        writer.println(matrix.toString());
         writer.close();
     }
 }
