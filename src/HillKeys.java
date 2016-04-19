@@ -94,8 +94,9 @@ public class HillKeys {
     private static DenseMatrix<Real> generateD(DenseMatrix<Real> K) {
 
         Real det = K.determinant();
-        Real detInv = Real.valueOf(LargeInteger.valueOf(det.longValue())
-                .modInverse(LargeInteger.valueOf(Util.NUM_IN_ALPHBET)).longValue());
+        LargeInteger numInAlphabet = LargeInteger.valueOf(Util.NUM_IN_ALPHBET);
+        LargeInteger detLI = LargeInteger.valueOf(det.longValue());
+        Real detInv = Real.valueOf(detLI.modInverse(numInAlphabet).longValue());
 
         DenseMatrix<Real> inverse = K.inverse().times(det.times(detInv));
 
