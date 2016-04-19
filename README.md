@@ -11,7 +11,7 @@ These scripts compile and run the three programs in the task.
 Make sure they are runnable using:
 
 ```bash
-chmod +x <filename>
+chmod +x filename
 ```
 
 ## Usage
