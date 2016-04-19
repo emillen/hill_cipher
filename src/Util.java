@@ -68,9 +68,9 @@ class Util {
             Scanner input = new Scanner(System.in);
             String a = input.next();
 
-            if (a.equals("yes")) {
+            if (a.toLowerCase().equals("yes")) {
                 return true;
-            } else if (a.equals("no")) {
+            } else if (a.toLowerCase().equals("no")) {
                 return false;
             }
         }
@@ -163,7 +163,7 @@ class Util {
 
                 vectors.add(DenseVector.valueOf(characters));
 
-                if(last == -1)
+                if (last == -1)
                     break;
             }
         } catch (Exception e) {
@@ -178,7 +178,7 @@ class Util {
         for (int i = 0; i < 3; i++) {
             int charact = reader.read();
             if (charact == -1) {
-                pad(characters, i , last);
+                pad(characters, i, last);
                 return -1;
             }
             charact -= 65;
@@ -191,10 +191,10 @@ class Util {
         return last;
     }
 
-    private static void pad(List<Real> characters, int i, int last){
+    private static void pad(List<Real> characters, int i, int last) {
 
         int pad = padNumber(i);
-        if(last == 1 && i == 0)
+        if (last == 1 && i == 0)
             pad = 3;
         for (int j = 0; j < pad; j++) {
             characters.add(Real.valueOf(pad));
