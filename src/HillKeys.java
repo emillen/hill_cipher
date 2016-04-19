@@ -47,7 +47,7 @@ public class HillKeys {
 
 
     /**
-     * Generates an invertible matrix with gcd(detM, 26) != 1
+     * Generates an invertible matrix with gcd(detM, 26) == 1
      *
      * @return a invertible matrix
      */
